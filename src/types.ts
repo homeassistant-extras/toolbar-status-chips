@@ -3,19 +3,19 @@
  */
 export interface Config {
   /** Additional text label to display alongside the entity */
-  additional_label: string;
+  additional_label?: string;
 
   /** Area identifier where this configuration applies */
-  area: string;
+  area?: string;
 
   /** Flag indicating whether this configuration is optional */
-  optional: boolean;
+  optional?: boolean;
 
   /** Label to display when entity is the only one in its group */
-  solo_label: string;
+  solo_label?: string;
 
   /** Path to fetch the entity's current status */
-  status_path: string;
+  status_path?: string;
 }
 
 /**
@@ -23,14 +23,14 @@ export interface Config {
  * Contains collections of entities and devices managed by Home Assistant.
  */
 export interface HomeAssistant {
-  /** Array of all entities registered in Home Assistant */
-  entities: Entity[];
+  /** Map of entity IDs to their corresponding entities */
+  entities: Record<string, Entity>;
 
-  /** Array of all physical devices registered in Home Assistant */
-  devices: Device[];
+  /** Map of device IDs to their corresponding devices */
+  devices: Record<string, Device>;
 
-  /** Object containing the current state of all entities in Home Assistant */
-  states: State[];
+  /** Map of entity IDs to their current states */
+  states: Record<string, State>;
 
   /** Object containing the current theme settings for Home Assistant */
   themes: Themes;
@@ -40,6 +40,9 @@ export interface HomeAssistant {
  * Represents a Home Assistant entity with its relationships to areas and devices.
  */
 export interface Entity {
+  /** ID of the entity */
+  entity_id: string;
+
   /** ID of the area where this entity is located */
   area_id: string;
 

@@ -1,4 +1,10 @@
-# Toolbar Status Chips Card
+<p align="center">
+    <img src="assets/chips.png" align="center" width="30%">
+</p>
+<p align="center"><h1 align="center">TOOLBAR-STATUS-CHIPS</h1></p>
+<p align="center">
+	<em>Status at a glance, always.</em>
+</p>
 
 ![Home Assistant](https://img.shields.io/badge/home%20assistant-%2341BDF5.svg?style=for-the-badge&logo=home-assistant&logoColor=white)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
@@ -11,6 +17,19 @@
 ![stars](https://img.shields.io/github/stars/homeassistant-extras/toolbar-status-chips.svg?style=for-the-badge)
 ![home](https://img.shields.io/github/last-commit/homeassistant-extras/toolbar-status-chips.svg?style=for-the-badge)
 ![commits](https://img.shields.io/github/commit-activity/y/homeassistant-extras/toolbar-status-chips?style=for-the-badge)
+![license](https://img.shields.io/github/license/homeassistant-extras/toolbar-status-chips?style=for-the-badge&logo=opensourceinitiative&logoColor=white&color=0080ff)
+
+<p align="center">Built with the tools and technologies:</p>
+<p align="center">
+	<img src="https://img.shields.io/badge/npm-CB3837.svg?style=for-the-badge&logo=npm&logoColor=white" alt="npm">
+	<img src="https://img.shields.io/badge/Prettier-F7B93E.svg?style=for-the-badge&logo=Prettier&logoColor=black" alt="Prettier">
+	<img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=for-the-badge&logo=TypeScript&logoColor=white" alt="TypeScript">
+	<img src="https://img.shields.io/badge/GitHub%20Actions-2088FF.svg?style=for-the-badge&logo=GitHub-Actions&logoColor=white" alt="GitHub%20Actions">
+	<img src="https://img.shields.io/badge/Lit-324FFF.svg?style=for-the-badge&logo=Lit&logoColor=white" alt="Lit">
+</p>
+<br>
+
+## Overview
 
 A custom card for Home Assistant that displays status chips in the toolbar for entities labeled with "status". The chips automatically update based on entity states and are positioned at the top of your dashboard.
 
@@ -280,35 +299,54 @@ Common issues and solutions:
    - Refresh the page
    - Check for conflicts with other custom cards
 
+## Project Roadmap
+
+- [x] **`Initial design`**: <strike>create initial room card based on button-card template in UI minimialist theme.</strike>
+- [ ] **`Test on other themes`**: make sure it works elsewhere.
+
 ## Contributing
 
-This project follows the standard GitHub workflow:
+- **💬 [Join the Discussions](https://github.com/homeassistant-extras/toolbar-status-chips/discussions)**: Share your insights, provide feedback, or ask questions.
+- **🐛 [Report Issues](https://github.com/homeassistant-extras/toolbar-status-chips/issues)**: Submit bugs found or log feature requests for the `toolbar-status-chips` project.
+- **💡 [Submit Pull Requests](https://github.com/homeassistant-extras/toolbar-status-chips/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
 
-1. Fork the repository
-2. Create a feature branch
-3. Submit a Pull Request
+<details closed>
+<summary>Contributing Guidelines</summary>
 
-## Support
-
-- [Report a bug][issues]
-- [Request a feature][issues]
-- [Ask for help in HA Community][forum]
+1. **Fork the Repository**: Start by forking the project repository to your github account.
+2. **Clone Locally**: Clone the forked repository to your local machine using a git client.
+   ```sh
+   git clone https://github.com/homeassistant-extras/toolbar-status-chips
+   ```
+3. **Create a New Branch**: Always work on a new branch, giving it a descriptive name.
+   ```sh
+   git checkout -b new-feature-x
+   ```
+4. **Make Your Changes**: Develop and test your changes locally.
+5. **Commit Your Changes**: Commit with a clear message describing your updates.
+   ```sh
+   git commit -m 'Implemented new feature x.'
+   ```
+6. **Push to github**: Push the changes to your forked repository.
+   ```sh
+   git push origin new-feature-x
+   ```
+7. **Submit a Pull Request**: Create a PR against the original project repository. Clearly describe the changes and their motivations.
+8. **Review**: Once your PR is reviewed and approved, it will be merged into the main branch. Congratulations on your contribution!
+</details>
 
 ## License
 
-MIT License - see the [LICENSE](LICENSE) file for details
+This project is protected under the MIT License. For more details, refer to the [LICENSE](LICENSE) file.
 
 ## Acknowledgments
 
 - Built using [LitElement](https://lit.dev/)
 - Inspired by Home Assistant's chip design
+- Button-Card was a huge inspo
 - Thanks to all contributors!
 
-[releases-shield]: https://img.shields.io/github/release/custom-cards/toolbar-status-chips.svg
-[releases]: https://github.com/custom-cards/toolbar-status-chips/releases
-[license-shield]: https://img.shields.io/github/license/custom-cards/toolbar-status-chips.svg
-[issues]: https://github.com/custom-cards/toolbar-status-chips/issues
-[forum]: https://community.home-assistant.io/
+[![contributors](https://contrib.rocks/image?repo=homeassistant-extras/toolbar-status-chips)](https://github.com{/homeassistant-extras/toolbar-status-chips/}graphs/contributors)
 
 ## Build Status
 

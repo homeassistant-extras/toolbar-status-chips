@@ -1,4 +1,4 @@
-import { ToolbarStatusChips } from './card';
+import ToolbarStatusChips from './card';
 
 declare global {
   interface Window {

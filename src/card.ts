@@ -1,18 +1,17 @@
 import { Task } from '@lit/task';
-import * as equal from 'fast-deep-equal';
 import { CSSResult, html, LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
-
 import { version } from '../package.json';
 import { createChipConfig } from './config';
 import { ChipEntity } from './entity';
 import { addMarginForChips, entitiesThatShouldBeChips } from './helpers';
 import { styles } from './styles';
 import type { Config, HomeAssistant } from './types';
+const equal = require('fast-deep-equal');
 
 declare function loadCardHelpers(): Promise<any>;
 
-export class ToolbarStatusChips extends LitElement {
+export default class ToolbarStatusChips extends LitElement {
   @state()
   private _config!: Config;
 
@@ -100,9 +99,9 @@ export class ToolbarStatusChips extends LitElement {
     // filter entities by additional label if provided or area if not on the status page
     if (!this.soloLabel) {
       // solo label trumps additional filtering
-      if (this.additionalLabel) {
+      if (this.additionalLabel !== undefined && this.additionalLabel !== '') {
         entities = entities.filter((entity) =>
-          entity.labels.includes(this.additionalLabel),
+          entity.labels.includes(this.additionalLabel!),
         );
       } else if (this.area !== this.statusPath) {
         // filter entities by area as well
