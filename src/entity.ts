@@ -103,8 +103,14 @@ export class ChipEntity {
    */
   private validateState(): StateValidation {
     if (!this.isNumeric(this.state)) {
-      if (this.state === (this.attributes.on_state || 'on')) {
-        return StateValidation.Error;
+      if (this.attributes.on_state) {
+        if (this.state === this.attributes.on_state) {
+          return StateValidation.Error;
+        }
+      } else {
+        if (['on', 'true'].includes(this.state?.toLowerCase())) {
+          return StateValidation.Error;
+        }
       }
       return StateValidation.Pass;
     }
