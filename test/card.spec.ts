@@ -6,7 +6,7 @@ import ToolbarStatusChips from '../src/card';
 import { ChipEntity } from '../src/entity';
 import type { HomeAssistant } from '../src/types';
 
-describe('ToolbarStatusChips', () => {
+describe('card.ts', () => {
   let element: ToolbarStatusChips;
   let mockHass: HomeAssistant;
   let createChipsTaskStub: SinonStub;

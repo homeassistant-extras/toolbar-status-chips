@@ -99,7 +99,7 @@ export default class ToolbarStatusChips extends LitElement {
     // filter entities by additional label if provided or area if not on the status page
     if (!this.soloLabel) {
       // solo label trumps additional filtering
-      if (this.additionalLabel !== undefined && this.additionalLabel !== '') {
+      if (this.additionalLabel && this.additionalLabel !== '') {
         entities = entities.filter((entity) =>
           entity.labels.includes(this.additionalLabel!),
         );

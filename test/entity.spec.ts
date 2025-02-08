@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { ChipEntity } from '../src/entity';
 
-describe('ChipEntity', () => {
+describe('entity.ts', () => {
   describe('isActive', () => {
     it('should return true for numeric state > 0', () => {
       const entity = new ChipEntity('sensor.test', '1', {});
@@ -15,6 +15,16 @@ describe('ChipEntity', () => {
 
     it('should return true for matching on_state', () => {
       const entity = new ChipEntity('switch.test', 'on', { on_state: 'on' });
+      expect(entity.isActive).to.be.true;
+    });
+
+    it('should return true for matching true', () => {
+      const entity = new ChipEntity('switch.test', 'true', {});
+      expect(entity.isActive).to.be.true;
+    });
+
+    it('should return true for matching True', () => {
+      const entity = new ChipEntity('switch.test', 'TruE', {});
       expect(entity.isActive).to.be.true;
     });
 

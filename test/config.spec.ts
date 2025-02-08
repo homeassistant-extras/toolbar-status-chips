@@ -3,7 +3,7 @@ import { createChipConfig } from '../src/config';
 import { ChipEntity } from '../src/entity';
 import type { HomeAssistant } from '../src/types';
 
-describe('createChipConfig', () => {
+describe('config.ts', () => {
   let mockEntity: ChipEntity;
   let mockHass: HomeAssistant;
 
