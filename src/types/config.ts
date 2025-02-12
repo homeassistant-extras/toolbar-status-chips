@@ -8,9 +8,6 @@ export interface Config {
   /** Area identifier where this configuration applies */
   area?: string;
 
-  /** Flag indicating whether this configuration is optional */
-  optional?: boolean;
-
   /** Label to display when entity is the only one in its group */
   solo_label?: string;
 
@@ -21,4 +18,4 @@ export interface Config {
   features?: Features[];
 }
 
-export type Features = 'foo';
+export type Features = 'optional';

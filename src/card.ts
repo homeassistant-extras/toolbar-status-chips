@@ -69,9 +69,10 @@ export default class ToolbarStatusChips extends LitElement {
   }
 
   get optional() {
-    return this._config.optional !== undefined
-      ? this._config.optional
-      : this.area === this.statusPath;
+    return (
+      this._config.features?.includes('optional') ||
+      this.area === this.statusPath
+    );
   }
 
   get soloLabel() {

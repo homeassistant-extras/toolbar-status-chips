@@ -254,6 +254,24 @@ sensor.pet_thirst_filter:
 
 ## Usage
 
+![WIP](https://img.shields.io/badge/Work%20In%20Progress-gold?style=for-the-badge&logo=internetcomputer)
+
+Add the card to your dashboard using the UI editor or YAML:
+
+### Card Editor
+
+This card is fully configurable in the card editor, however if setup right you don't need to setup any of these options.
+
+![editor](assets/editor.png)
+
+### YAML
+
+This is the most minimal configuarion needed to get started. See below for advanced usage.
+
+```yaml
+type: custom:toolbar-status-chips
+```
+
 The card will automatically:
 
 - Display chips for any entity labeled with "status" that is in an active state
@@ -265,13 +283,19 @@ The card will automatically:
 
 ### Card Configuration
 
-| Name             | Type    | Default                     | Description                                                                              |
-| ---------------- | ------- | --------------------------- | ---------------------------------------------------------------------------------------- |
-| status_path      | string  | "home"                      | The path identifier for the home view. These show all "problem" chips across all areas.  |
-| optional         | boolean | `true` on the `status_path` | Hides chips that are not active.                                                         |
-| additional_label | string  | null                        | This is useful if you want to roll-up entities in a non area view, using a second label. |
-| solo_label       | string  | null                        | Use this option to override having a status label or areas.                              |
-| area             | string  | null                        | Use this option to override using the url slug.                                          |
+| Name             | Type   | Default   | Description                                                                              |
+| ---------------- | ------ | --------- | ---------------------------------------------------------------------------------------- |
+| status_path      | string | "home"    | The path identifier for the home view. These show all "problem" chips across all areas.  |
+| additional_label | string | null      | This is useful if you want to roll-up entities in a non area view, using a second label. |
+| solo_label       | string | null      | Use this option to override having a status label or areas.                              |
+| area             | string | null      | Use this option to override using the url slug.                                          |
+| features         | list   | See below | Optional flags to toggle different features                                              |
+
+### Feature Options
+
+| Name     | Type | Description                                                  |
+| -------- | ---- | ------------------------------------------------------------ |
+| optional | flag | Hides chips that are not active (automatic on `status_path`) |
 
 ### Entity Configuration
 

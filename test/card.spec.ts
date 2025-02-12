@@ -30,7 +30,7 @@ describe('card.ts', () => {
       areas: {},
       themes: { darkMode: false },
     } as HomeAssistant;
-    element.setConfig({ optional: false, status_path: 'home' });
+    element.setConfig({ area: '' });
     element.hass = mockHass as HomeAssistant;
   });
 
@@ -42,13 +42,12 @@ describe('card.ts', () => {
   describe('Configuration', () => {
     it('should set config when valid', () => {
       expect((element as any)['_config']).to.deep.equal({
-        optional: false,
-        status_path: 'home',
+        area: '',
       });
     });
 
     it('should update config only when different', () => {
-      const config = { optional: false, status_path: 'home' };
+      const config = { area: '' };
       element.setConfig(config);
       element.setConfig({ ...config });
       expect((element as any)['_config']).to.deep.equal(config);
@@ -65,7 +64,6 @@ describe('card.ts', () => {
   describe('Property getters', () => {
     beforeEach(() => {
       element.setConfig({
-        optional: false,
         status_path: 'home',
         area: 'living_room',
         additional_label: 'test',
@@ -81,8 +79,18 @@ describe('card.ts', () => {
       expect(element.area).to.equal('living_room');
     });
 
-    it('should return correct optional value', () => {
+    it('should return correct optional value when not on status_path', () => {
       expect(element.optional).to.be.false;
+    });
+
+    it('should return correct optional value when set', () => {
+      element.setConfig({ features: ['optional'] });
+      expect(element.optional).to.be.true;
+    });
+
+    it('should return correct optional value when on status_path', () => {
+      element.setConfig({ status_path: 'foo', area: 'foo' });
+      expect(element.optional).to.be.true;
     });
 
     it('should return correct soloLabel', () => {
@@ -110,7 +118,6 @@ describe('card.ts', () => {
 
     beforeEach(() => {
       element.setConfig({
-        optional: false,
         status_path: 'home',
       });
 
