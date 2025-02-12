@@ -1,12 +1,13 @@
+import { createChipConfig } from '@/config';
+import { ChipEntity } from '@/entity';
+import { addMarginForChips, entitiesThatShouldBeChips } from '@/helpers';
 import { Task } from '@lit/task';
+import type { Config } from '@type/config';
+import type { HomeAssistant } from '@type/homeassistant';
 import { CSSResult, html, LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
 import { version } from '../package.json';
-import { createChipConfig } from './config';
-import { ChipEntity } from './entity';
-import { addMarginForChips, entitiesThatShouldBeChips } from './helpers';
-import { styles } from './styles';
-import type { Config, HomeAssistant } from './types';
+import { chipStyles, styles } from './styles';
 const equal = require('fast-deep-equal');
 
 declare function loadCardHelpers(): Promise<any>;
@@ -24,6 +25,9 @@ export default class ToolbarStatusChips extends LitElement {
   // not state
   private _hass!: HomeAssistant;
 
+  // for editor
+  public editMode: boolean = false;
+
   constructor() {
     super();
     this._slug = document?.URL?.split('?')[0]
@@ -38,11 +42,13 @@ export default class ToolbarStatusChips extends LitElement {
   }
 
   override render() {
-    return this._entities
+    const styles = chipStyles(this.isEditing);
+    return this._entities.length
       ? this._createChipsTask.render({
           initial: () => html``,
           pending: () => html``,
-          complete: (value) => html`<div id="chips">${value}</div>`,
+          complete: (value) =>
+            html`<div id="chips" style="${styles}">${value}</div>`,
           error: (error) => html`${error}`,
         })
       : html``;
@@ -74,6 +80,14 @@ export default class ToolbarStatusChips extends LitElement {
 
   get statusPath() {
     return this._config.status_path || 'home';
+  }
+
+  get isEditing(): boolean {
+    return (
+      this.editMode ||
+      (this as HTMLElement).parentElement?.classList.contains('preview') ||
+      false
+    );
   }
 
   /*
@@ -126,6 +140,55 @@ export default class ToolbarStatusChips extends LitElement {
     }
   }
 
+  // card configuration
+  static getConfigElement() {
+    return document.createElement('toolbar-status-chips-editor');
+  }
+
+  public static async getStubConfig(hass: HomeAssistant): Promise<Config> {
+    // Get all area IDs and their details
+    const areas = Object.entries(hass.areas);
+
+    // Track area entity counts
+    const areaStatusCounts = new Map<string, number>();
+
+    // Count status entities for each area
+    areas.forEach(([areaId, _]) => {
+      // Get all entities for this area
+      const devices = Object.values(hass.devices)
+        .filter((device) => device.area_id === areaId)
+        .map((device) => device.id);
+      const areaEntities = Object.entries(hass.entities).filter(
+        ([_, entity]) =>
+          entity.area_id === areaId || devices.includes(entity.device_id),
+      );
+
+      // Count entities with status label
+      const statusCount = areaEntities.filter(([_, entity]) =>
+        entity.labels?.includes('status'),
+      ).length;
+
+      if (statusCount > 0) {
+        areaStatusCounts.set(areaId, statusCount);
+      }
+    });
+
+    // Find area with highest count
+    let maxAreaId = '';
+    let maxCount = 0;
+
+    areaStatusCounts.forEach((count, areaId) => {
+      if (count > maxCount) {
+        maxCount = count;
+        maxAreaId = areaId;
+      }
+    });
+
+    return {
+      area: maxAreaId,
+    };
+  }
+
   // Task handles async work
   _createChipsTask = new Task(this, {
     task: async () => {
@@ -151,11 +214,4 @@ export default class ToolbarStatusChips extends LitElement {
     },
     args: () => [],
   });
-
-  static getStubConfig() {
-    return {
-      optional: false,
-      status_path: 'home',
-    };
-  }
 }

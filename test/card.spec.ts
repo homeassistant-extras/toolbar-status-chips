@@ -1,38 +1,50 @@
+import ToolbarStatusChips from '@/card';
+import { ChipEntity } from '@/entity';
+import type { HomeAssistant } from '@/types/homeassistant';
 import { Task } from '@lit/task';
 import { expect } from 'chai';
 import { html } from 'lit';
-import { type SinonStub, stub } from 'sinon';
-import ToolbarStatusChips from '../src/card';
-import { ChipEntity } from '../src/entity';
-import type { HomeAssistant } from '../src/types';
+import { stub } from 'sinon';
 
 describe('card.ts', () => {
   let element: ToolbarStatusChips;
   let mockHass: HomeAssistant;
-  let createChipsTaskStub: SinonStub;
+  let consoleInfoStub: sinon.SinonStub;
+  let createChipsTaskStub: sinon.SinonStub;
 
   beforeEach(() => {
+    consoleInfoStub = stub(console, 'info');
+    createChipsTaskStub = stub(Task.prototype, 'render');
     element = new ToolbarStatusChips();
     mockHass = {
-      entities: {},
+      entities: {
+        'light.living_room': {
+          entity_id: 'light.living_room',
+          labels: ['status'],
+          area_id: 'living_room',
+          device_id: 'device_1',
+        },
+      },
       devices: {},
       states: {},
+      areas: {},
       themes: { darkMode: false },
     } as HomeAssistant;
-
-    // Stub the _createChipsTask
-    createChipsTaskStub = stub(Task.prototype, 'render');
+    element.setConfig({ optional: false, status_path: 'home' });
+    element.hass = mockHass as HomeAssistant;
   });
 
   afterEach(() => {
+    consoleInfoStub.restore();
     createChipsTaskStub.restore();
   });
 
   describe('Configuration', () => {
     it('should set config when valid', () => {
-      const config = { optional: false, status_path: 'home' };
-      element.setConfig(config);
-      expect((element as any)['_config']).to.deep.equal(config);
+      expect((element as any)['_config']).to.deep.equal({
+        optional: false,
+        status_path: 'home',
+      });
     });
 
     it('should update config only when different', () => {
@@ -42,12 +54,11 @@ describe('card.ts', () => {
       expect((element as any)['_config']).to.deep.equal(config);
     });
 
-    it('should return stub config from static method', () => {
-      const stubConfig = ToolbarStatusChips.getStubConfig();
-      expect(stubConfig).to.deep.equal({
-        optional: false,
-        status_path: 'home',
-      });
+    it('should return correct editor element', () => {
+      const editor = ToolbarStatusChips.getConfigElement();
+      expect(editor.tagName.toLowerCase()).to.equal(
+        'toolbar-status-chips-editor',
+      );
     });
   });
 
@@ -147,8 +158,90 @@ describe('card.ts', () => {
     });
   });
 
+  describe('Stub Config Generation', () => {
+    it('should return config for area with most status entities', async () => {
+      mockHass.areas = {
+        area1: { area_id: 'area1', icon: '' },
+        area2: { area_id: 'area2', icon: '' },
+      };
+
+      mockHass.devices = {
+        device1: { id: 'device1', area_id: 'area1' },
+        device2: { id: 'device2', area_id: 'area2' },
+      };
+
+      mockHass.entities = {
+        'light.area1_1': {
+          entity_id: 'light.area1_1',
+          device_id: 'device1',
+          labels: ['status'],
+          area_id: '',
+        },
+        'light.area1_2': {
+          entity_id: 'light.area1_2',
+          device_id: 'device1',
+          labels: ['status'],
+          area_id: '',
+        },
+        'light.area2_1': {
+          entity_id: 'light.area2_1',
+          device_id: 'device2',
+          labels: ['status'],
+          area_id: '',
+        },
+      };
+
+      const stubConfig = await ToolbarStatusChips.getStubConfig(mockHass);
+      expect(stubConfig).to.deep.equal({
+        area: 'area1', // area1 has 2 status entities vs area2's 1
+      });
+    });
+
+    it('should handle areas with no status entities', async () => {
+      mockHass.areas = {
+        area1: { area_id: 'area1', icon: '' },
+      };
+
+      mockHass.devices = {
+        device1: { id: 'device1', area_id: 'area1' },
+      };
+
+      mockHass.entities = {
+        'light.area1_1': {
+          entity_id: 'light.area1_1',
+          device_id: 'device1',
+          labels: ['not-status'],
+          area_id: '',
+        },
+      };
+
+      const stubConfig = await ToolbarStatusChips.getStubConfig(mockHass);
+      expect(stubConfig).to.deep.equal({
+        area: '', // No areas have status entities
+      });
+    });
+  });
+
+  describe('isEditing Property', () => {
+    it('should return true when editMode is true', () => {
+      element.editMode = true;
+      expect(element.isEditing).to.be.true;
+    });
+
+    it('should return true when parent has preview class', async () => {
+      // todo - figure this out
+    });
+
+    it('should return false when neither condition is met', () => {
+      element.editMode = false;
+      expect(element.isEditing).to.be.false;
+    });
+  });
+
   describe('Rendering', () => {
     it('should render empty when no entities', () => {
+      mockHass.entities = {};
+      element.hass = mockHass;
       const result = element.render();
       expect(result).to.deep.equal(html``);
     });

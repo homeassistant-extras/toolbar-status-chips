@@ -1,5 +1,5 @@
+import { ChipEntity } from '@/entity';
 import { expect } from 'chai';
-import { ChipEntity } from '../src/entity';
 
 describe('entity.ts', () => {
   describe('isActive', () => {

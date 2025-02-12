@@ -1,7 +1,7 @@
+import { addMarginForChips, entitiesThatShouldBeChips } from '@/helpers';
+import type { Entity, HomeAssistant } from '@type/homeassistant';
 import { expect } from 'chai';
 import { type SinonStub, stub } from 'sinon';
-import { addMarginForChips, entitiesThatShouldBeChips } from '../src/helpers';
-import type { Entity, HomeAssistant } from '../src/types';
 
 describe('helpers.ts', () => {
   describe('entitiesThatShouldBeChips', () => {
@@ -19,6 +19,7 @@ describe('helpers.ts', () => {
         },
         devices: {},
         entities: {},
+        areas: {},
         themes: { darkMode: false },
       } as HomeAssistant;
 

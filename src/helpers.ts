@@ -1,5 +1,5 @@
-import { ChipEntity } from './entity';
-import type { Entity, HomeAssistant } from './types';
+import { ChipEntity } from '@/entity';
+import type { Entity, HomeAssistant } from './types/homeassistant';
 
 /**
  * Determines if an entity should be included based on its state and path configuration

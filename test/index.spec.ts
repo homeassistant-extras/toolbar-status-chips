@@ -24,27 +24,29 @@ describe('index.ts', () => {
     // Restore the original customElements.define
     customElementsStub.restore();
     customCardsStub = undefined;
-    delete require.cache[require.resolve('../src/index.ts')];
+    delete require.cache[require.resolve('@/index.ts')];
   });
 
-  it('should register the toolbar-status-chips custom element', () => {
-    require('../src/index.ts');
-
-    expect(customElementsStub.calledOnce).to.be.true;
+  it('should register both toolbar-status-chips and editor custom elements', () => {
+    require('@/index.ts');
+    expect(customElementsStub.calledTwice).to.be.true;
     expect(customElementsStub.firstCall.args[0]).to.equal(
       'toolbar-status-chips',
+    );
+    expect(customElementsStub.secondCall.args[0]).to.equal(
+      'toolbar-status-chips-editor',
     );
   });
 
   it('should initialize window.customCards if undefined', () => {
     customCardsStub = undefined;
-    require('../src/index.ts');
+    require('@/index.ts');
 
     expect(window.customCards).to.be.an('array');
   });
 
-  it('should add card configuration to window.customCards', () => {
-    require('../src/index.ts');
+  it('should add card configuration with all fields to window.customCards', () => {
+    require('@/index.ts');
 
     expect(window.customCards).to.have.lengthOf(1);
     expect(window.customCards[0]).to.deep.equal({
@@ -52,6 +54,9 @@ describe('index.ts', () => {
       name: 'Toolbar Status Chips',
       description:
         'Display status chips on the toolbar for entities with the status label',
+      preview: true,
+      documentationURL:
+        'https://github.com/homeassistant-extras/toolbar-status-chips',
     });
   });
 
@@ -64,7 +69,7 @@ describe('index.ts', () => {
       },
     ];
 
-    require('../src/index.ts');
+    require('@/index.ts');
 
     expect(window.customCards).to.have.lengthOf(2);
     expect(window.customCards[0]).to.deep.equal({
@@ -74,10 +79,10 @@ describe('index.ts', () => {
   });
 
   it('should handle multiple imports without duplicating registration', () => {
-    require('../src/index.ts');
-    require('../src/index.ts');
+    require('@/index.ts');
+    require('@/index.ts');
 
     expect(window.customCards).to.have.lengthOf(1);
-    expect(customElementsStub.calledOnce).to.be.true;
+    expect(customElementsStub.callCount).to.equal(2); // Called twice for initial registration only
   });
 });

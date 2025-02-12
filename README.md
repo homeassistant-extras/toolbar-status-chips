@@ -302,7 +302,9 @@ Common issues and solutions:
 ## Project Roadmap
 
 - [x] **`Initial design`**: <strike>create initial room card based on button-card template in UI minimialist theme.</strike>
+- [x] **`Card Editor`**: <strike>ability to use the HA card editor.</strike>
 - [ ] **`Test on other themes`**: make sure it works elsewhere.
+- [ ] **`No button card`**: remove reliance on other cards.
 
 ## Contributing
 

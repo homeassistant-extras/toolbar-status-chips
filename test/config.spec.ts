@@ -1,7 +1,7 @@
+import { createChipConfig } from '@/config';
+import { ChipEntity } from '@/entity';
+import type { HomeAssistant } from '@/types/homeassistant';
 import { expect } from 'chai';
-import { createChipConfig } from '../src/config';
-import { ChipEntity } from '../src/entity';
-import type { HomeAssistant } from '../src/types';
 
 describe('config.ts', () => {
   let mockEntity: ChipEntity;

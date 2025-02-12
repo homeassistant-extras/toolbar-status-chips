@@ -1,24 +1,4 @@
 /**
- * Configuration settings for entity display and behavior.
- */
-export interface Config {
-  /** Additional text label to display alongside the entity */
-  additional_label?: string;
-
-  /** Area identifier where this configuration applies */
-  area?: string;
-
-  /** Flag indicating whether this configuration is optional */
-  optional?: boolean;
-
-  /** Label to display when entity is the only one in its group */
-  solo_label?: string;
-
-  /** Path to fetch the entity's current status */
-  status_path?: string;
-}
-
-/**
  * Root interface representing the Home Assistant instance structure.
  * Contains collections of entities and devices managed by Home Assistant.
  */
@@ -32,8 +12,22 @@ export interface HomeAssistant {
   /** Map of entity IDs to their current states */
   states: Record<string, State>;
 
+  /** Map of area IDs to their corresponding areas */
+  areas: Record<string, Area>;
+
   /** Object containing the current theme settings for Home Assistant */
   themes: Themes;
+}
+
+/**
+ * Represents an area in Home Assistant.
+ */
+export interface Area {
+  /** Unique identifier for the area */
+  area_id: string;
+
+  /** Icon associated with the area */
+  icon: string;
 }
 
 /**
