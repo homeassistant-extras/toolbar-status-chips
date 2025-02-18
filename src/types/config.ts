@@ -18,4 +18,5 @@ export interface Config {
   features?: Features[];
 }
 
+/** Features to enable or disable functionality */
 export type Features = 'optional';

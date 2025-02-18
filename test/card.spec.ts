@@ -5,6 +5,7 @@ import { Task } from '@lit/task';
 import { expect } from 'chai';
 import { html } from 'lit';
 import { stub } from 'sinon';
+import { version } from '../package.json';
 
 describe('card.ts', () => {
   let element: ToolbarStatusChips;
@@ -37,6 +38,21 @@ describe('card.ts', () => {
   afterEach(() => {
     consoleInfoStub.restore();
     createChipsTaskStub.restore();
+  });
+
+  describe('constructor', () => {
+    it('should log the version with proper formatting', () => {
+      // Assert that console.info was called once
+      expect(consoleInfoStub.calledOnce).to.be.true;
+
+      // Assert that it was called with the expected arguments
+      expect(
+        consoleInfoStub.calledWithExactly(
+          `%c🐱 Poat's Tools: toolbar-status-chips - ${version}`,
+          'color: #CFC493;',
+        ),
+      ).to.be.true;
+    });
   });
 
   describe('Configuration', () => {

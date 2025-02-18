@@ -335,6 +335,7 @@ Common issues and solutions:
 - **💬 [Join the Discussions](https://github.com/homeassistant-extras/toolbar-status-chips/discussions)**: Share your insights, provide feedback, or ask questions.
 - **🐛 [Report Issues](https://github.com/homeassistant-extras/toolbar-status-chips/issues)**: Submit bugs found or log feature requests for the `toolbar-status-chips` project.
 - **💡 [Submit Pull Requests](https://github.com/homeassistant-extras/toolbar-status-chips/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
+- **📣 [Check out discord](https://discord.gg/F28wupKC)**: Need further help, have ideas, want to chat?
 
 <details closed>
 <summary>Contributing Guidelines</summary>
@@ -373,6 +374,8 @@ This project is protected under the MIT License. For more details, refer to the 
 - Thanks to all contributors!
 
 [![contributors](https://contrib.rocks/image?repo=homeassistant-extras/toolbar-status-chips)](https://github.com{/homeassistant-extras/toolbar-status-chips/}graphs/contributors)
+
+[![ko-fi](https://img.shields.io/badge/buy%20me%20a%20coffee-72A5F2?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/N4N71AQZQG)
 
 ## Build Status
 
