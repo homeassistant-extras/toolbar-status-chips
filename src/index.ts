@@ -1,7 +1,7 @@
 /**
- * Room Summary Card Registration Module
+ * lit element card Registration Module
  *
- * This module handles the registration of the Room Summary Card custom element
+ * This module handles the registration of the lit element card custom element
  * with the browser and Home Assistant's custom card registry. It makes the
  * component available for use in Home Assistant dashboards.
  */

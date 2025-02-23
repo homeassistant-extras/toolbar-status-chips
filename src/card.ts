@@ -132,6 +132,7 @@ export default class ToolbarStatusChips extends LitElement {
 
     const chips = entitiesThatShouldBeChips(entities, hass, this.optional);
 
+    // todo - don't set raw objects to properties of this...
     // check if the entities have changed - update the card
     if (!equal(chips, this._entities)) {
       // no need to check states if entities have changed
