@@ -69,8 +69,6 @@ describe('editor.ts', () => {
       card.setConfig(testConfig);
 
       const el = await fixture(card.render() as TemplateResult);
-      console.log(el.innerHTML);
-      console.log(el.outerHTML);
       expect(el.outerHTML).to.equal(
         `<div>
         <h4>

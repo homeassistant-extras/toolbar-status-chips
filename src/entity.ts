@@ -36,7 +36,7 @@ export class ChipEntity {
    */
   get isActive(): boolean {
     const validation = this.validateState();
-    return validation !== StateValidation.Pass;
+    return validation === StateValidation.Error;
   }
 
   /**
@@ -78,11 +78,17 @@ export class ChipEntity {
 
   /**
    * Checks if a value is numeric
+   * don't use ES6 syntax or this will be a key and break fast-deep-equal
+   * @param num Value to check
+   * @returns True if the value is numeric, false otherwise
    */
-  private isNumeric = (num: any) =>
-    (typeof num === 'number' ||
-      (typeof num === 'string' && num.trim() !== '')) &&
-    !isNaN(num as number);
+  private isNumeric(num: any): boolean {
+    return (
+      (typeof num === 'number' ||
+        (typeof num === 'string' && num.trim() !== '')) &&
+      !isNaN(num as number)
+    );
+  }
 
   /**
    * Validates a state value against defined thresholds if numeric, or against 'on' state if non-numeric

@@ -123,9 +123,11 @@ describe('card.ts', () => {
     });
 
     it('should use slug as area when area not provided', () => {
-      stub(window, 'URL').returns({ pathname: 'foo/slug' } as any);
+      const windowStub = stub(window, 'URL');
+      windowStub.returns({ pathname: 'foo/slug' } as any);
       element.setConfig({});
       expect(element.area).to.equal((element as any)._slug);
+      windowStub.restore();
     });
   });
 
@@ -252,7 +254,27 @@ describe('card.ts', () => {
     });
 
     it('should return true when parent has preview class', async () => {
-      // todo - figure this out
+      // Create a mock parent element
+      const mockParentElement = {
+        classList: {
+          contains: (className: string) => className === 'preview',
+        },
+      };
+
+      // Use Object.defineProperty to mock the parentElement property
+      Object.defineProperty(element, 'parentElement', {
+        get: () => mockParentElement,
+        configurable: true, // Allow the property to be redefined later
+      });
+
+      // Verify isEditing returns true
+      expect(element.isEditing).to.be.true;
+
+      // Clean up - restore the original property descriptor
+      Object.defineProperty(element, 'parentElement', {
+        value: null,
+        configurable: true,
+      });
     });
 
     it('should return false when neither condition is met', () => {
