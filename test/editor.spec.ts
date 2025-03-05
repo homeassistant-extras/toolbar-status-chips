@@ -90,6 +90,13 @@ describe('editor.ts', () => {
       const form = el.querySelector('ha-form');
       expect((form as any).hass).to.deep.equal(hass);
       expect((form as any).data).to.deep.equal(testConfig);
+      // Test the computeLabel function behavior
+      const computeLabel = (form as any).computeLabel;
+      expect(typeof computeLabel).to.equal('function');
+
+      // Test with sample schema items
+      const sampleSchema = { name: 'test', label: 'Test Label' };
+      expect(computeLabel(sampleSchema)).to.equal('Test Label');
       expect((form as any).schema).to.deep.equal([
         {
           name: 'area',

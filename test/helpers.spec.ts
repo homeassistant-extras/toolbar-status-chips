@@ -38,6 +38,35 @@ describe('helpers.ts', () => {
       expect(result[0]?.entity_id).to.equal('light.living_room');
       expect(result[0]?.state).to.equal('on');
     });
+
+    it('should exclude entities with excludeOnStatusPath when optional is true', () => {
+      // Create a mock entity with excludeOnStatusPath attribute set to true
+      mockEntities = [
+        {
+          entity_id: 'light.living_room',
+          area_id: 'living_room',
+          device_id: 'device_1',
+          labels: ['status'],
+        },
+      ];
+
+      // Set up the state with excludeOnStatusPath attribute
+      mockHass.states = {
+        'light.living_room': {
+          entity_id: 'light.living_room',
+          state: 'on',
+          attributes: {
+            exclude_on_status_path: true,
+          },
+        },
+      };
+
+      // Call the function with optional=true
+      const result = entitiesThatShouldBeChips(mockEntities, mockHass, true);
+
+      // Assert that no entities are returned because it should be excluded
+      expect(result).to.have.lengthOf(0);
+    });
   });
 
   describe('addMarginForChips', () => {
