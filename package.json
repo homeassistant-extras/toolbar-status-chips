@@ -14,11 +14,12 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
-    "test": "TS_NODE_PROJECT='./tsconfig.test.json' nyc --reporter=text mocha",
-    "test-ci": "TS_NODE_PROJECT='./tsconfig.test.json' nyc  --reporter=text --reporter=lcov --report-dir=coverage mocha",
+    "test": "TS_NODE_PROJECT='./tsconfig.test.json' mocha",
+    "test:coverage": "nyc npm run test",
     "test:watch": "TS_NODE_PROJECT='./tsconfig.test.json' mocha --watch"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@open-wc/testing": "^4.0.0",
     "@parcel/transformer-inline-string": "^2.13.3",
     "@testing-library/dom": "^10.4.0",

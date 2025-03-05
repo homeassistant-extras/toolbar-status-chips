@@ -83,11 +83,27 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Test and coverage
-        run: npm run test-ci
+        run: npm run test:coverage
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  hacs-validation:
+    name: 'HACS Validation'
+    needs: check-committer
+    runs-on: 'ubuntu-latest'
+
+    if: ${{ needs.check-committer.outputs.should_run == 'true' }}
+
+    steps:
+      - name: 'Checkout the repository'
+        uses: 'actions/checkout@v4'
+
+      - name: 'Run HACS validation'
+        uses: 'hacs/action@main'
+        with:
+          category: 'plugin'
 
   create-release:
     name: 'Create Release'
