@@ -5,7 +5,6 @@ on:
     branches:
       - 'main'
       - 'release'
-      - 'actions' # todo remove
 
 jobs:
   check-committer:
@@ -74,7 +73,7 @@ jobs:
     needs: check-committer
     runs-on: ubuntu-latest
 
-    if: ${{ needs.check-committer.outputs.should_run == 'true' }}
+    if: ${{ needs.check-committer.outputs.should_run == 'true' && github.ref == 'refs/heads/main' }}
 
     steps:
       - uses: actions/checkout@v2
