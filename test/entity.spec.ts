@@ -18,6 +18,11 @@ describe('entity.ts', () => {
       expect(entity.isActive).to.be.true;
     });
 
+    it('should return false for undefined state', () => {
+      const entity = new ChipEntity('switch.test', undefined, {});
+      expect(entity.isActive).to.be.false;
+    });
+
     it('should return true for matching true', () => {
       const entity = new ChipEntity('switch.test', 'true', {});
       expect(entity.isActive).to.be.true;

@@ -15,12 +15,12 @@ enum StateValidation {
  */
 export class ChipEntity {
   entity_id: string;
-  state: string;
+  state: string | undefined;
   attributes: Record<string, any>;
 
   constructor(
     entity_id: string,
-    state: string,
+    state: string | undefined,
     attributes: Record<string, any>,
   ) {
     this.entity_id = entity_id;
@@ -43,7 +43,7 @@ export class ChipEntity {
    * Determines if the entity state is a positive number
    */
   get isPositiveState(): boolean {
-    return this.isNumeric(this.state) && parseFloat(this.state) > 0;
+    return this.isNumeric(this.state) && parseFloat(this.state!) > 0;
   }
 
   /**
@@ -114,14 +114,14 @@ export class ChipEntity {
           return StateValidation.Error;
         }
       } else {
-        if (['on', 'true'].includes(this.state?.toLowerCase())) {
+        if (this.state && ['on', 'true'].includes(this.state.toLowerCase())) {
           return StateValidation.Error;
         }
       }
       return StateValidation.Pass;
     }
 
-    const numericState = parseFloat(this.state);
+    const numericState = parseFloat(this.state!);
 
     // Check if threshold attributes exist
     if (
