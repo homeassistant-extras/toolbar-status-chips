@@ -9,6 +9,7 @@
 !*.json
 !*.ts
 !.prettierrc
+!.nycrc
 !assets/**
 !dist/**
 !.github/**

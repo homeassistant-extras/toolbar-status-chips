@@ -86,7 +86,6 @@ jobs:
         uses: anna-money/github-actions-npm@master
         with:
           target: 'test:coverage'
-      - run: ls -al #todo remove
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
