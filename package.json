@@ -14,7 +14,8 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
-    "test": "TS_NODE_PROJECT='./tsconfig.test.json' mocha",
+    "test": "TS_NODE_PROJECT='./tsconfig.test.json' nyc --reporter=text mocha",
+    "test-ci": "TS_NODE_PROJECT='./tsconfig.test.json' nyc  --reporter=text --reporter=lcov --report-dir=coverage mocha",
     "test:watch": "TS_NODE_PROJECT='./tsconfig.test.json' mocha --watch"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
     "chai": "^5.1.2",
     "jsdom": "^26.0.0",
     "mocha": "^11.1.0",
+    "nyc": "^17.1.0",
     "parcel": "^2.13.3",
     "prettier": "3.5.0",
     "prettier-plugin-organize-imports": "^4.1.0",

@@ -15,9 +15,12 @@
 !.gitignore
 !*.md
 !LICENSE
+!sonar-project.properties
 
 # Ignore folders.
 node_modules
-.vscode
 dist
+coverage
+.vscode
 .DS_Store
+.nyc_output

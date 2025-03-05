@@ -68,6 +68,8 @@ This card is slightly opinionated in how you need to setup things for it to work
 
 ### HACS (Recommended)
 
+[![HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=homeassistant-extras&repository=toolbar-status-chips&category=dashboard)
+
 1. Open HACS in your Home Assistant instance
 2. Click the menu icon in the top right and select "Custom repositories"
 3. Add this repository URL and select "Dashboard" as the category
@@ -376,6 +378,27 @@ This project is protected under the MIT License. For more details, refer to the 
 [![contributors](https://contrib.rocks/image?repo=homeassistant-extras/toolbar-status-chips)](https://github.com{/homeassistant-extras/toolbar-status-chips/}graphs/contributors)
 
 [![ko-fi](https://img.shields.io/badge/buy%20me%20a%20coffee-72A5F2?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/N4N71AQZQG)
+
+## Code Quality
+
+Forgive me and my badges..
+
+Stats
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=bugs)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=coverage)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+
+Ratings
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=homeassistant-extras_toolbar-status-chips&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=homeassistant-extras_toolbar-status-chips)
 
 ## Build Status
 

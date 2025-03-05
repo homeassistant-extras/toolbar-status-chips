@@ -5,6 +5,7 @@ on:
     branches:
       - 'main'
       - 'release'
+      - 'actions' # todo remove
 
 jobs:
   check-committer:
@@ -68,13 +69,35 @@ jobs:
           git push --follow-tags
           git push --tags
 
+  sonarqube:
+    name: 'Sonar Qube Scan'
+    needs: check-committer
+    runs-on: ubuntu-latest
+
+    if: ${{ needs.check-committer.outputs.should_run == 'true' }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm i
+      - name: Test and coverage
+        run: npm run test-ci
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   create-release:
     name: 'Create Release'
     needs: bump-version
-    if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
+    if: github.ref == 'refs/heads/release'
+
     steps:
       - uses: actions/checkout@v3
         with:
