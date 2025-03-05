@@ -1,6 +1,6 @@
 {
   "name": "toolbar-status-card",
-  "version": "0.18.0",
+  "version": "0.18.5",
   "author": "Patrick Masters",
   "license": "ISC",
   "description": "Custom status badges for Home Assistant in the toolbar",
@@ -15,9 +15,11 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "TS_NODE_PROJECT='./tsconfig.test.json' mocha",
+    "test:coverage": "nyc npm run test",
     "test:watch": "TS_NODE_PROJECT='./tsconfig.test.json' mocha --watch"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@open-wc/testing": "^4.0.0",
     "@parcel/transformer-inline-string": "^2.13.3",
     "@testing-library/dom": "^10.4.0",
@@ -29,6 +31,7 @@
     "chai": "^5.1.2",
     "jsdom": "^26.0.0",
     "mocha": "^11.1.0",
+    "nyc": "^17.1.0",
     "parcel": "^2.13.3",
     "prettier": "3.5.0",
     "prettier-plugin-organize-imports": "^4.1.0",
