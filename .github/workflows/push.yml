@@ -83,7 +83,7 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Test and coverage
-        run: npm run test:coverage
+        run: npm run test
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
