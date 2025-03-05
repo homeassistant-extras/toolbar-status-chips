@@ -80,10 +80,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Install dependencies
-        run: npm i
-      - name: Test and coverage
-        run: npm run test
+      - name: Run NPM test
+        uses: anna-money/github-actions-npm@master
+        with:
+          target: 'test:coverage'
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
