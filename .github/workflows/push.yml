@@ -79,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Run NPM test
         uses: anna-money/github-actions-npm@master
         with:
