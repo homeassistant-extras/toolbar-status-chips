@@ -338,6 +338,7 @@ Common issues and solutions:
 - **🐛 [Report Issues](https://github.com/homeassistant-extras/toolbar-status-chips/issues)**: Submit bugs found or log feature requests for the `toolbar-status-chips` project.
 - **💡 [Submit Pull Requests](https://github.com/homeassistant-extras/toolbar-status-chips/blob/main/CONTRIBUTING.md)**: Review open PRs, and submit your own PRs.
 - **📣 [Check out discord](https://discord.gg/F28wupKC)**: Need further help, have ideas, want to chat?
+- **🃏 [Check out my other cards!](https://github.com/orgs/homeassistant-extras/repositories)** Maybe you have an integration that I made cards for.
 
 <details closed>
 <summary>Contributing Guidelines</summary>
