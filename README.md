@@ -405,10 +405,17 @@ Ratings
 
 ### Main
 
-[![Bump & Tag](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/push.yml/badge.svg?branch=main)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/push.yml)
+[![CodeQL](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/github-code-scanning/codeql)
+[![Dependabot Updates](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/dependabot/dependabot-updates)
+[![Main Branch CI](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/main-ci.yaml/badge.svg?branch=main)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/main-ci.yaml)
 [![Fast Forward Check](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/pull_request.yaml/badge.svg?branch=main)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/pull_request.yaml)
 
 ### Release
 
-[![Bump & Tag](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/push.yml/badge.svg?branch=release)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/push.yml)
+[![Release & Deploy](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/release-cd.yaml/badge.svg)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/release-cd.yaml)
 [![Merge](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/merge.yaml/badge.svg)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/merge.yaml)
+
+### Other
+
+[![Issue assignment](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/assign.yaml/badge.svg)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/assign.yaml)
+[![Manual Release](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/manual-release.yaml/badge.svg)](https://github.com/homeassistant-extras/toolbar-status-chips/actions/workflows/manual-release.yaml)
