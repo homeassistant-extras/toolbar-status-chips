@@ -5,9 +5,9 @@ import { Task } from '@lit/task';
 import type { Config } from '@type/config';
 import type { HomeAssistant } from '@type/homeassistant';
 import { CSSResult, html, LitElement, type TemplateResult } from 'lit';
-import { state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { version } from '../package.json';
-import { chipStyles, styles } from './styles';
+import { styles } from './styles';
 const equal = require('fast-deep-equal');
 
 /**
@@ -41,7 +41,7 @@ export default class ToolbarStatusChips extends LitElement {
    * @state Marks this as a reactive property that will trigger updates
    */
   @state()
-  private _slug: string | undefined;
+  private readonly _slug: string | undefined;
 
   /**
    * Reference to the current Home Assistant instance
@@ -52,8 +52,31 @@ export default class ToolbarStatusChips extends LitElement {
   /**
    * Flag indicating whether the card is in edit mode
    * Used by the Home Assistant card editor
+   * @property Marks this as a reactive property that reflects to attribute
    */
+  @property({
+    type: Boolean,
+    attribute: 'edit-mode',
+    reflect: true,
+  })
   public editMode: boolean = false;
+
+  /**
+   * Flag indicating whether the card is in preview mode
+   * Used by the Home Assistant card editor
+   * @property Marks this as a reactive property that reflects to attribute
+   */
+  @property({
+    type: Boolean,
+    attribute: true,
+    reflect: true,
+  })
+  get preview() {
+    return (
+      (this as HTMLElement).parentElement?.classList.contains('preview') ??
+      false
+    );
+  }
 
   /**
    * Creates an instance of ToolbarStatusChips
@@ -78,13 +101,11 @@ export default class ToolbarStatusChips extends LitElement {
    * @returns {TemplateResult} The rendered HTML template
    */
   override render(): TemplateResult {
-    const styles = chipStyles(this.isEditing);
     return this._entities.length
       ? this._createChipsTask.render({
           initial: () => html``,
           pending: () => html``,
-          complete: (value) =>
-            html`<div id="chips" style="${styles}">${value}</div>`,
+          complete: (value) => html`${value}`,
           error: (error) => html`${error}`,
         })
       : html``;
@@ -114,7 +135,7 @@ export default class ToolbarStatusChips extends LitElement {
    * @returns {string | undefined} The area ID to use for filtering
    */
   get area() {
-    return this._config.area || this._slug;
+    return this._config.area ?? this._slug;
   }
 
   /**
@@ -144,20 +165,7 @@ export default class ToolbarStatusChips extends LitElement {
    * @returns {string} The path identifier for the status/home view
    */
   get statusPath() {
-    return this._config.status_path || 'home';
-  }
-
-  /**
-   * Determines if the card is currently in editing mode
-   * True if editMode is explicitly set or if parent has 'preview' class
-   * @returns {boolean} Whether the card is being edited
-   */
-  get isEditing(): boolean {
-    return (
-      this.editMode ||
-      (this as HTMLElement).parentElement?.classList.contains('preview') ||
-      false
-    );
+    return this._config.status_path ?? 'home';
   }
 
   /*
@@ -183,7 +191,7 @@ export default class ToolbarStatusChips extends LitElement {
   set hass(hass: HomeAssistant) {
     // get entities with the status label
     let entities = Object.values(hass.entities).filter((entity) =>
-      entity.labels.includes(this.soloLabel || 'status'),
+      entity.labels.includes(this.soloLabel ?? 'status'),
     );
 
     // filter entities by additional label if provided or area if not on the status page
@@ -290,7 +298,7 @@ export default class ToolbarStatusChips extends LitElement {
         return;
       }
 
-      var stack = helpers.createCardElement({
+      const stack = helpers.createCardElement({
         type: 'horizontal-stack',
         cards,
       });

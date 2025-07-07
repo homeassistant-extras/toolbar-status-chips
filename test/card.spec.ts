@@ -247,13 +247,13 @@ describe('card.ts', () => {
     });
   });
 
-  describe('isEditing Property', () => {
-    it('should return true when editMode is true', () => {
+  describe('Edit State Properties', () => {
+    it('should set editMode property correctly', () => {
       element.editMode = true;
-      expect(element.isEditing).to.be.true;
+      expect(element.editMode).to.be.true;
     });
 
-    it('should return true when parent has preview class', async () => {
+    it('should set preview property when parent has preview class', async () => {
       // Create a mock parent element
       const mockParentElement = {
         classList: {
@@ -267,8 +267,11 @@ describe('card.ts', () => {
         configurable: true, // Allow the property to be redefined later
       });
 
-      // Verify isEditing returns true
-      expect(element.isEditing).to.be.true;
+      // Call render to trigger _updateEditState
+      element.render();
+
+      // Verify preview property is set to true
+      expect(element.preview).to.be.true;
 
       // Clean up - restore the original property descriptor
       Object.defineProperty(element, 'parentElement', {
@@ -277,9 +280,9 @@ describe('card.ts', () => {
       });
     });
 
-    it('should return false when neither condition is met', () => {
-      element.editMode = false;
-      expect(element.isEditing).to.be.false;
+    it('should not set preview property when parent does not have preview class', () => {
+      element.render();
+      expect(element.preview).to.be.false;
     });
   });
 

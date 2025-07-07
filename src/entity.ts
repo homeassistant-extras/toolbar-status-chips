@@ -62,10 +62,10 @@ export class ChipEntity {
       case StateValidation.Pass:
         return 'var(--green-color)';
       case StateValidation.Warning:
-        return this.attributes.on_color || 'var(--amber-color)';
+        return this.attributes.on_color ?? 'var(--amber-color)';
       default:
         // Non-numeric fail or below warning threshold
-        return this.attributes.on_color || 'var(--red-color)';
+        return this.attributes.on_color ?? 'var(--red-color)';
     }
   }
 
@@ -73,7 +73,7 @@ export class ChipEntity {
    * Indicates whether an optional entity should be excluded when inactive from the status path.
    */
   get excludeOnStatusPath(): boolean {
-    return this.attributes.exclude_on_status_path || false;
+    return this.attributes.exclude_on_status_path ?? false;
   }
 
   /**
@@ -109,36 +109,62 @@ export class ChipEntity {
    */
   private validateState(): StateValidation {
     if (!this.isNumeric(this.state)) {
-      if (this.attributes.on_state) {
-        if (this.state === this.attributes.on_state) {
-          return StateValidation.Error;
-        }
-      } else {
-        if (this.state && ['on', 'true'].includes(this.state.toLowerCase())) {
-          return StateValidation.Error;
-        }
-      }
-      return StateValidation.Pass;
+      return this.validateNonNumericState();
     }
 
+    return this.validateNumericState();
+  }
+
+  /**
+   * Validates non-numeric state values
+   */
+  private validateNonNumericState(): StateValidation {
+    if (this.attributes.on_state) {
+      return this.state === this.attributes.on_state
+        ? StateValidation.Error
+        : StateValidation.Pass;
+    }
+
+    if (this.state && ['on', 'true'].includes(this.state.toLowerCase())) {
+      return StateValidation.Error;
+    }
+
+    return StateValidation.Pass;
+  }
+
+  /**
+   * Validates numeric state values
+   */
+  private validateNumericState(): StateValidation {
     const numericState = parseFloat(this.state!);
 
-    // Check if threshold attributes exist
-    if (
-      this.attributes.numeric_state_pass_threshold === undefined &&
-      this.attributes.numeric_state_warning_threshold === undefined
-    ) {
-      // Fallback logic: Pass if 0, Error if > 0
-      return numericState === 0 ? StateValidation.Pass : StateValidation.Error;
+    if (this.hasThresholds()) {
+      return this.validateWithThresholds(numericState);
     }
 
+    return numericState === 0 ? StateValidation.Pass : StateValidation.Error;
+  }
+
+  /**
+   * Checks if threshold attributes are defined
+   */
+  private hasThresholds(): boolean {
+    return (
+      this.attributes.numeric_state_pass_threshold !== undefined ||
+      this.attributes.numeric_state_warning_threshold !== undefined
+    );
+  }
+
+  /**
+   * Validates numeric state using defined thresholds
+   */
+  private validateWithThresholds(numericState: number): StateValidation {
     if (numericState > this.attributes.numeric_state_pass_threshold) {
       return StateValidation.Pass;
     }
     if (numericState > this.attributes.numeric_state_warning_threshold) {
       return StateValidation.Warning;
     }
-
     return StateValidation.Error;
   }
 }

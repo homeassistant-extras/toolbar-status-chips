@@ -315,7 +315,6 @@ The card will automatically:
 Common issues and solutions:
 
 1. **Chips not appearing:**
-
    - Verify entities have the "status" label
    - Check entity states match their `on_state` attribute or `on`
    - Ensure the card is properly loaded in resources
