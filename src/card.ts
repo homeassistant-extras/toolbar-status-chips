@@ -1,6 +1,10 @@
 import { createChipConfig } from '@/config';
 import { ChipEntity } from '@/entity';
-import { addMarginForChips, entitiesThatShouldBeChips } from '@/helpers';
+import {
+  addMarginForChips,
+  entitiesThatShouldBeChips,
+  getChipsTopOffset,
+} from '@/helpers';
 import { Task } from '@lit/task';
 import type { Config } from '@type/config';
 import type { HomeAssistant } from '@type/homeassistant';
@@ -94,6 +98,36 @@ export default class ToolbarStatusChips extends LitElement {
       'color: #CFC493;',
     );
   }
+
+  /**
+   * Starts listening for viewport changes so the chips can be repositioned
+   * (e.g. rotating a phone changes the header layout)
+   */
+  override connectedCallback(): void {
+    super.connectedCallback();
+    window.addEventListener('resize', this._positionChips);
+  }
+
+  /**
+   * Stops listening for viewport changes
+   */
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener('resize', this._positionChips);
+  }
+
+  /**
+   * Places the chips just below the header on mobile, otherwise falls back
+   * to the default position from the styles
+   */
+  private readonly _positionChips = (): void => {
+    const top = getChipsTopOffset();
+    if (top === undefined) {
+      this.style.removeProperty('--toolbar-status-chips-top');
+    } else {
+      this.style.setProperty('--toolbar-status-chips-top', `${top}px`);
+    }
+  };
 
   /**
    * Renders the lit element card
@@ -305,6 +339,7 @@ export default class ToolbarStatusChips extends LitElement {
       stack.hass = this._hass;
 
       addMarginForChips();
+      this._positionChips();
 
       return stack;
     },

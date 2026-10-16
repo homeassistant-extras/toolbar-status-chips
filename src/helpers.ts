@@ -95,6 +95,26 @@ export const entitiesThatShouldBeChips = (
 };
 
 /**
+ * Whether the viewport matches the mobile breakpoint (max-width: 768px).
+ */
+const isMobile = (): boolean =>
+  window.matchMedia('only screen and (max-width: 768px)').matches;
+
+/**
+ * Navigates through Home Assistant's shadow DOM to find the lovelace root.
+ * Each querySelector may return null, so we use optional chaining.
+ *
+ * @returns The shadow root of `hui-root`, if found
+ */
+const getHuiRoot = (): ShadowRoot | null | undefined =>
+  document
+    ?.querySelector('home-assistant')
+    ?.shadowRoot?.querySelector('home-assistant-main')
+    ?.shadowRoot?.querySelector('ha-drawer partial-panel-resolver')
+    ?.querySelector('ha-panel-lovelace')
+    ?.shadowRoot?.querySelector('hui-root')?.shadowRoot;
+
+/**
  * Adds top margin to the main Home Assistant view container to accommodate chips on mobile devices.
  * This function only applies margin on mobile viewports (max-width: 768px).
  * It navigates through Home Assistant's shadow DOM structure to find the view container.
@@ -111,21 +131,44 @@ export const entitiesThatShouldBeChips = (
  */
 export const addMarginForChips = (margin = 45): void => {
   // Check if viewport matches mobile breakpoint
-  if (!window.matchMedia('only screen and (max-width: 768px)').matches) {
+  if (!isMobile()) {
     // Skip margin addition if not on mobile viewport
     return;
   }
 
-  // Navigate through Home Assistant's shadow DOM to find the view container
-  // Each querySelector may return null, so we use optional chaining
-  const viewContainer = document
-    ?.querySelector('home-assistant')
-    ?.shadowRoot?.querySelector('home-assistant-main')
-    ?.shadowRoot?.querySelector('ha-drawer partial-panel-resolver')
-    ?.querySelector('ha-panel-lovelace')
-    ?.shadowRoot?.querySelector('hui-root')
-    ?.shadowRoot?.querySelector('hui-view-container') as HTMLElement;
+  const viewContainer = getHuiRoot()?.querySelector(
+    'hui-view-container',
+  ) as HTMLElement;
 
   // Set the margin if we found the container
   viewContainer?.style?.setProperty('margin-top', `${margin}px`);
+};
+
+/**
+ * Calculates where the chips should sit on mobile so they render just below
+ * the dashboard header instead of on top of it (or under the iOS status bar).
+ * The header's bounding box already includes the safe-area inset, so this
+ * works for the companion app too.
+ *
+ * Returns undefined on desktop, when the header can't be found / is hidden,
+ * or when the header has been moved to the bottom of the screen - callers
+ * should fall back to the default position in those cases.
+ *
+ * @param gap - Space in pixels between the header and the chips, defaults to 4
+ * @returns The top offset in pixels, or undefined to use the default position
+ */
+export const getChipsTopOffset = (gap = 4): number | undefined => {
+  if (!isMobile()) {
+    return undefined;
+  }
+
+  const header = getHuiRoot()?.querySelector('.header') as HTMLElement | null;
+  const rect = header?.getBoundingClientRect?.();
+
+  // header is missing, hidden (kiosk mode etc), or moved to the bottom
+  if (!rect || rect.height === 0 || rect.top > window.innerHeight / 2) {
+    return undefined;
+  }
+
+  return rect.bottom + gap;
 };

@@ -1,4 +1,8 @@
-import { addMarginForChips, entitiesThatShouldBeChips } from '@/helpers';
+import {
+  addMarginForChips,
+  entitiesThatShouldBeChips,
+  getChipsTopOffset,
+} from '@/helpers';
 import type { Entity, HomeAssistant } from '@type/homeassistant';
 import { expect } from 'chai';
 import { type SinonStub, stub } from 'sinon';
@@ -126,6 +130,78 @@ describe('helpers.ts', () => {
       querySelectorStub.returns(null);
       // Should not throw an error
       expect(() => addMarginForChips()).to.not.throw();
+    });
+  });
+
+  describe('getChipsTopOffset', () => {
+    let matchMediaStub: SinonStub;
+    let querySelectorStub: SinonStub;
+    let mockHeader: HTMLElement;
+    let rect: Partial<DOMRect>;
+
+    beforeEach(() => {
+      matchMediaStub = stub(window, 'matchMedia');
+      mockHeader = document.createElement('div');
+      rect = { top: 0, bottom: 103, height: 103 };
+      mockHeader.getBoundingClientRect = () => rect as DOMRect;
+      querySelectorStub = stub(document, 'querySelector').returns({
+        shadowRoot: {
+          querySelector: () => ({
+            shadowRoot: {
+              querySelector: () => ({
+                querySelector: () => ({
+                  shadowRoot: {
+                    querySelector: () => ({
+                      shadowRoot: {
+                        querySelector: () => mockHeader,
+                      },
+                    }),
+                  },
+                }),
+              }),
+            },
+          }),
+        },
+      } as any);
+    });
+
+    afterEach(() => {
+      matchMediaStub.restore();
+      querySelectorStub.restore();
+    });
+
+    it('should place chips below the header on mobile', () => {
+      matchMediaStub.returns({ matches: true } as MediaQueryList);
+      expect(getChipsTopOffset()).to.equal(107);
+    });
+
+    it('should use a custom gap', () => {
+      matchMediaStub.returns({ matches: true } as MediaQueryList);
+      expect(getChipsTopOffset(10)).to.equal(113);
+    });
+
+    it('should return undefined on desktop', () => {
+      matchMediaStub.returns({ matches: false } as MediaQueryList);
+      expect(getChipsTopOffset()).to.be.undefined;
+    });
+
+    it('should return undefined when the header is hidden', () => {
+      matchMediaStub.returns({ matches: true } as MediaQueryList);
+      rect = { top: 0, bottom: 0, height: 0 };
+      expect(getChipsTopOffset()).to.be.undefined;
+    });
+
+    it('should return undefined when the header is at the bottom', () => {
+      matchMediaStub.returns({ matches: true } as MediaQueryList);
+      const bottom = window.innerHeight;
+      rect = { top: bottom - 56, bottom, height: 56 };
+      expect(getChipsTopOffset()).to.be.undefined;
+    });
+
+    it('should handle missing DOM elements gracefully', () => {
+      matchMediaStub.returns({ matches: true } as MediaQueryList);
+      querySelectorStub.returns(null);
+      expect(getChipsTopOffset()).to.be.undefined;
     });
   });
 });
