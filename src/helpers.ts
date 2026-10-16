@@ -38,8 +38,8 @@ const shouldIncludeEntity = (
  * Merges two arrays of objects based on a common key, updating items from arr1 with matching properties from arr2.
  * Properties from arr2 will overwrite properties in arr1 if they exist in both objects.
  *
- * @param {any[]} arr1 - The primary array of objects to be updated
- * @param {any[]} arr2 - The secondary array of objects containing update values
+ * @param {T[]} arr1 - The primary array of objects to be updated
+ * @param {U[]} arr2 - The secondary array of objects containing update values
  * @param {string} key - The property name to use as the matching key between objects
  * @returns A new array where objects from arr1 are updated with matching properties from arr2
  *
@@ -49,10 +49,14 @@ const shouldIncludeEntity = (
  * mergeArraysUsingMapObject(users, updates, 'id');
  * // Returns: [{ id: 1, name: 'John', age: 30 }, { id: 2, name: 'Jane', age: 25 }]
  */
-const mergeArraysUsingMapObject = (arr1: any[], arr2: any[], key: string) => {
+const mergeArraysUsingMapObject = <T extends object, U extends object>(
+  arr1: T[],
+  arr2: U[],
+  key: keyof T & keyof U,
+): (T & Partial<U>)[] => {
   // Create a Map object using arr2, with the specified key as the Map key
   // This provides O(1) lookup time for matching objects
-  const map = new Map(arr2.map((item) => [item[key], item]));
+  const map = new Map<unknown, U>(arr2.map((item) => [item[key], item]));
 
   // Map over arr1 and spread both the original item and any matching updates from arr2
   // If no matching item exists in arr2, map.get() returns undefined and no properties are spread
@@ -89,7 +93,7 @@ export const entitiesThatShouldBeChips = (
   return mergedEntities
     .map(
       (entity) =>
-        new ChipEntity(entity.entity_id, entity.state, entity.attributes),
+        new ChipEntity(entity.entity_id, entity.state, entity.attributes ?? {}),
     )
     .filter((entity) => shouldIncludeEntity(entity, optional));
 };

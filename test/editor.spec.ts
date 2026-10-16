@@ -11,7 +11,14 @@ describe('editor.ts', () => {
   let hass: HomeAssistant;
   let dispatchStub: sinon.SinonStub;
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    if (!customElements.get('toolbar-status-chips-editor')) {
+      customElements.define(
+        'toolbar-status-chips-editor',
+        ToolbarStatusChipsEditor,
+      );
+    }
+
     // Create mock HomeAssistant instance
     hass = {
       states: {},
@@ -51,13 +58,13 @@ describe('editor.ts', () => {
   });
 
   describe('render', () => {
-    it('should return nothing when hass is not set', async () => {
+    it('should return nothing when hass is not set', () => {
       card.hass = undefined as any;
       const result = card.render();
       expect(result).to.equal(nothing);
     });
 
-    it('should return nothing when config is not set', async () => {
+    it('should return nothing when config is not set', () => {
       const result = card.render();
       expect(result).to.equal(nothing);
     });

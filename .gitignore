@@ -8,8 +8,9 @@
 # You can whitelist files/folders with !, these will not be ignored.
 !*.json
 !*.ts
-!.prettierrc
 !.nycrc
+!.ncurc.cjs
+!eslint.config.mjs
 !assets/**
 !dist/**
 !.github/**

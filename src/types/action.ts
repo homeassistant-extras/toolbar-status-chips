@@ -8,7 +8,7 @@
  */
 declare global {
   interface Window {
-    customCards: Array<Object>;
+    customCards: Array<object>;
   }
 }
 

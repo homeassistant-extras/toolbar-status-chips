@@ -32,7 +32,6 @@ import type { ActionParams } from '@type/action';
 import type { ConfigChangedEvent } from '@type/editor';
 
 declare global {
-  // eslint-disable-next-line
   interface HASSDomEvents {
     'hass-action': ActionParams;
     'config-changed': ConfigChangedEvent;

@@ -15,8 +15,15 @@ This is a **Yarn project**. Use `yarn`, not `npm`.
 - `yarn test` — Mocha + ts-node + tsconfig-paths, all `test/**/*.spec.ts`
 - `yarn test:coverage` — Tests with NYC/Istanbul coverage
 - `yarn test:watch` — Mocha watch mode
-- `yarn format` — Prettier (with `@trivago/prettier-plugin-sort-imports` and `prettier-plugin-organize-imports`)
+- `yarn format` — Prettier (shared config from `@homeassistant-extras/config/prettier`)
+- `yarn lint` / `yarn lint:fix` — ESLint via `@homeassistant-extras/config/eslint/card` ([eslint.config.mjs](eslint.config.mjs))
+- `yarn typecheck` — `tsc --noEmit` for both the src and test tsconfigs
+- `yarn pass` — format + typecheck + lint + test (run before opening a PR)
 - `yarn update` — `npm-check-updates -u` then reinstall
+
+### TypeScript is pinned to 6.x
+
+TypeScript 7 (the native port) has no JS compiler API, which breaks `ts-node`. [.ncurc.cjs](.ncurc.cjs) keeps `yarn update` on 6.x and [.github/dependabot.yaml](.github/dependabot.yaml) ignores TypeScript major bumps.
 
 ### Running a single test file
 
@@ -56,16 +63,18 @@ The card depends on the **button-card** custom component at runtime (it generate
 ### Configuration precedence and "opinions" worth knowing
 
 - `solo_label` overrides everything (ignores the `status` label requirement and area filtering).
-- `additional_label` requires entities to have *both* `status` and the additional label.
+- `additional_label` requires entities to have _both_ `status` and the additional label.
 - `area` overrides the URL slug; the URL slug is derived as the last path segment of `document.URL` with `-` → `_`.
 - `status_path` (default `'home'`) is the route that rolls up chips from all areas and implicitly enables the `optional` feature (hide inactive chips).
-- Per-entity customization (`on_state`, `on_color`, `navigation_path`, `numeric_state_pass_threshold`, `numeric_state_warning_threshold`, `exclude_on_status_path`) is read from HA entity *attributes*, set either via templates or HA `customize:`.
+- Per-entity customization (`on_state`, `on_color`, `navigation_path`, `numeric_state_pass_threshold`, `numeric_state_warning_threshold`, `exclude_on_status_path`) is read from HA entity _attributes_, set either via templates or HA `customize:`.
 
 ### Editor
 
 [src/editor.ts](src/editor.ts) implements `toolbar-status-chips-editor` using HA's `ha-form` schema (types in [src/types/ha-form.ts](src/types/ha-form.ts)).
 
 ### TypeScript path aliases ([tsconfig.json](tsconfig.json))
+
+`tsconfig.json` extends `@homeassistant-extras/config/tsconfig.base.json` (bundler resolution, strict) and only declares this repo's `paths`; `.nycrc` extends the shared NYC config.
 
 - `@/*` → `./src/*`
 - `@type/*` → `./src/types/*`
@@ -76,7 +85,8 @@ The card depends on the **button-card** custom component at runtime (it generate
 
 ### Testing setup
 
-- Mocha + Chai + Sinon, JSDOM via [mocha.setup.ts](mocha.setup.ts).
+- Mocha + Chai + Sinon, JSDOM via the shared `@homeassistant-extras/config/mocha/setup.card` (see [.mocharc.json](.mocharc.json)).
+- jsdom requires custom elements to be registered before `new`-ing them — guard with `if (!customElements.get(tag)) customElements.define(tag, Class)` in specs.
 - `tsconfig.test.json` is the active project for tests (`TS_NODE_PROJECT` env var); aliases resolve through `tsconfig-paths/register`.
 - Spec files live at `test/*.spec.ts` mirroring `src/*.ts`.
 

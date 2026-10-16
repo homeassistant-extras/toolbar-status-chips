@@ -59,16 +59,15 @@ export type Selector =
  */
 export interface AreaSelector {
   /** Empty object as this selector currently takes no additional configuration */
-  area: {};
+  area: Record<string, never>;
 }
 
 /**
  * Selector for boolean values (true/false), typically rendered as a toggle switch
  */
 export interface BooleanSelector {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   /** Empty object as this selector currently takes no additional configuration */
-  boolean: {};
+  boolean: Record<string, never>;
 }
 
 /**

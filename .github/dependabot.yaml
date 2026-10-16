@@ -18,3 +18,7 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
+    # TypeScript 7 (native port) has no JS API, which breaks ts-node - hold on 6.x
+    ignore:
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']

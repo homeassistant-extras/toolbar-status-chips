@@ -92,5 +92,6 @@ export type State = {
    * Can include properties like brightness, color, temperature, etc.
    * Keys are strings, values can be any type
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- attribute values are dynamic/untyped, mirrors upstream HA
   attributes: Record<string, any>;
 };

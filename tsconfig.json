@@ -1,28 +1,13 @@
 {
+  "extends": "@homeassistant-extras/config/tsconfig.base.json",
   "compilerOptions": {
-    /* Base Options: */
-    "skipLibCheck": true,
-    "target": "es2022",
-    "moduleResolution": "node",
-    "isolatedModules": true,
     "experimentalDecorators": true,
-    "useDefineForClassFields": false,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "verbatimModuleSyntax": true,
-
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-
-    /* Paths */
-    "baseUrl": ".",
     "paths": {
-      "@type/*": ["./src/types/*"],
+      "@/*": ["./src/*"],
       "@common/*": ["./src/common/*"],
       "@test/*": ["./src/tests/*"],
-      "@/*": ["./src/*"]
+      "@type/*": ["./src/types/*"]
     }
-  }
+  },
+  "include": ["src/**/*.ts"]
 }

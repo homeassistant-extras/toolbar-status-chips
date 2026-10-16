@@ -1,5 +1,6 @@
 import ToolbarStatusChips from '@/card';
 import { ChipEntity } from '@/entity';
+import * as helpers from '@/helpers';
 import type { HomeAssistant } from '@/types/homeassistant';
 import { Task } from '@lit/task';
 import { expect } from 'chai';
@@ -16,6 +17,9 @@ describe('card.ts', () => {
   beforeEach(() => {
     consoleInfoStub = stub(console, 'info');
     createChipsTaskStub = stub(Task.prototype, 'render');
+    if (!customElements.get('toolbar-status-chips')) {
+      customElements.define('toolbar-status-chips', ToolbarStatusChips);
+    }
     element = new ToolbarStatusChips();
     mockHass = {
       entities: {
@@ -253,7 +257,7 @@ describe('card.ts', () => {
       expect(element.editMode).to.be.true;
     });
 
-    it('should set preview property when parent has preview class', async () => {
+    it('should set preview property when parent has preview class', () => {
       // Create a mock parent element
       const mockParentElement = {
         classList: {
@@ -298,6 +302,103 @@ describe('card.ts', () => {
       (element as any)._entities = [new ChipEntity('test.entity', 'on', {})];
       element.render();
       expect(createChipsTaskStub.called).to.be.true;
+    });
+  });
+
+  describe('Positioning', () => {
+    let offsetStub: sinon.SinonStub;
+
+    beforeEach(() => {
+      offsetStub = stub(helpers, 'getChipsTopOffset');
+    });
+
+    afterEach(() => {
+      offsetStub.restore();
+    });
+
+    it('should listen for resize while connected', () => {
+      const addStub = stub(window, 'addEventListener');
+      const removeStub = stub(window, 'removeEventListener');
+      try {
+        element.connectedCallback();
+        expect(addStub.calledWith('resize')).to.be.true;
+        const listener = addStub.firstCall.args[1];
+
+        element.disconnectedCallback();
+        expect(removeStub.calledWith('resize', listener)).to.be.true;
+      } finally {
+        addStub.restore();
+        removeStub.restore();
+      }
+    });
+
+    it('should place chips below the header when an offset is found', () => {
+      offsetStub.returns(107);
+      (element as any)._positionChips();
+      expect(
+        element.style.getPropertyValue('--toolbar-status-chips-top'),
+      ).to.equal('107px');
+    });
+
+    it('should fall back to the default position without an offset', () => {
+      element.style.setProperty('--toolbar-status-chips-top', '107px');
+      offsetStub.returns(undefined);
+      (element as any)._positionChips();
+      expect(
+        element.style.getPropertyValue('--toolbar-status-chips-top'),
+      ).to.equal('');
+    });
+  });
+
+  describe('Chips task', () => {
+    let marginStub: sinon.SinonStub;
+    let offsetStub: sinon.SinonStub;
+    let createCardElementStub: sinon.SinonStub;
+
+    beforeEach(() => {
+      marginStub = stub(helpers, 'addMarginForChips');
+      offsetStub = stub(helpers, 'getChipsTopOffset').returns(undefined);
+      createCardElementStub = stub().returns(document.createElement('div'));
+      (globalThis as any).loadCardHelpers = () =>
+        Promise.resolve({ createCardElement: createCardElementStub });
+    });
+
+    afterEach(() => {
+      marginStub.restore();
+      offsetStub.restore();
+      delete (globalThis as any).loadCardHelpers;
+    });
+
+    const runTask = async () => {
+      await element._createChipsTask.run();
+      return element._createChipsTask.value;
+    };
+
+    it('should create a horizontal stack of chips', async () => {
+      (element as any)._entities = [
+        new ChipEntity('binary_sensor.door', 'on', {}),
+      ];
+      (element as any)._hass = mockHass;
+
+      const stack = await runTask();
+
+      expect(createCardElementStub.calledOnce).to.be.true;
+      const config = createCardElementStub.firstCall.args[0];
+      expect(config.type).to.equal('horizontal-stack');
+      expect(config.cards).to.have.length(1);
+      expect(stack.hass).to.equal(mockHass);
+      expect(marginStub.calledOnceWithExactly()).to.be.true;
+      expect(offsetStub.calledOnce).to.be.true;
+    });
+
+    it('should remove the margin when there are no chips', async () => {
+      (element as any)._entities = [];
+
+      const result = await runTask();
+
+      expect(result).to.be.undefined;
+      expect(createCardElementStub.called).to.be.false;
+      expect(marginStub.calledOnceWithExactly(0)).to.be.true;
     });
   });
 });

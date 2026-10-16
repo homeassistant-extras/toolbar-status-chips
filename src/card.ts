@@ -1,5 +1,5 @@
 import { createChipConfig } from '@/config';
-import { ChipEntity } from '@/entity';
+import { type ChipEntity } from '@/entity';
 import {
   addMarginForChips,
   entitiesThatShouldBeChips,
@@ -8,17 +8,22 @@ import {
 import { Task } from '@lit/task';
 import type { Config } from '@type/config';
 import type { HomeAssistant } from '@type/homeassistant';
-import { CSSResult, html, LitElement, type TemplateResult } from 'lit';
+import equal from 'fast-deep-equal';
+import { type CSSResult, html, LitElement, type TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { version } from '../package.json';
 import { styles } from './styles';
-const equal = require('fast-deep-equal');
 
 /**
  * Declaration for the loadCardHelpers function provided by Home Assistant
  * Used to create and configure card elements
  */
-declare function loadCardHelpers(): Promise<any>;
+declare function loadCardHelpers(): Promise<{
+  createCardElement(config: {
+    type: string;
+    cards: unknown[];
+  }): HTMLElement & { hass?: HomeAssistant };
+}>;
 
 /**
  * Main component class for the Toolbar Status Chips
@@ -254,7 +259,7 @@ export default class ToolbarStatusChips extends LitElement {
       // no need to check states if entities have changed
       this._entities = chips;
       this._hass = hass;
-      this._createChipsTask.run();
+      void this._createChipsTask.run();
     }
   }
 
@@ -270,9 +275,9 @@ export default class ToolbarStatusChips extends LitElement {
    * Generates a default configuration based on Home Assistant state
    * Finds the area with the most status-labeled entities
    * @param {HomeAssistant} hass - The Home Assistant state
-   * @returns {Promise<Config>} The generated configuration
+   * @returns {Config} The generated configuration
    */
-  public static async getStubConfig(hass: HomeAssistant): Promise<Config> {
+  public static getStubConfig(hass: HomeAssistant): Config {
     // Get all area IDs and their details
     const areas = Object.entries(hass.areas);
 
@@ -280,18 +285,18 @@ export default class ToolbarStatusChips extends LitElement {
     const areaStatusCounts = new Map<string, number>();
 
     // Count status entities for each area
-    areas.forEach(([areaId, _]) => {
+    areas.forEach(([areaId]) => {
       // Get all entities for this area
       const devices = Object.values(hass.devices)
         .filter((device) => device.area_id === areaId)
         .map((device) => device.id);
-      const areaEntities = Object.entries(hass.entities).filter(
-        ([_, entity]) =>
+      const areaEntities = Object.values(hass.entities).filter(
+        (entity) =>
           entity.area_id === areaId || devices.includes(entity.device_id),
       );
 
       // Count entities with status label
-      const statusCount = areaEntities.filter(([_, entity]) =>
+      const statusCount = areaEntities.filter((entity) =>
         entity.labels?.includes('status'),
       ).length;
 

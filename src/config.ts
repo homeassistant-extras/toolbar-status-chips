@@ -1,4 +1,4 @@
-import { ChipEntity } from '@/entity';
+import { type ChipEntity } from '@/entity';
 import type { HomeAssistant } from '@type/homeassistant';
 
 export function createChipConfig(entity: ChipEntity, hass: HomeAssistant) {

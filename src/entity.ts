@@ -16,11 +16,13 @@ enum StateValidation {
 export class ChipEntity {
   entity_id: string;
   state: string | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- attribute values are dynamic/untyped, mirrors upstream HA
   attributes: Record<string, any>;
 
   constructor(
     entity_id: string,
     state: string | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- attribute values are dynamic/untyped, mirrors upstream HA
     attributes: Record<string, any>,
   ) {
     this.entity_id = entity_id;
@@ -82,7 +84,7 @@ export class ChipEntity {
    * @param num Value to check
    * @returns True if the value is numeric, false otherwise
    */
-  private isNumeric(num: any): boolean {
+  private isNumeric(num: unknown): boolean {
     return (
       (typeof num === 'number' ||
         (typeof num === 'string' && num.trim() !== '')) &&
